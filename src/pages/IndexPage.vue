@@ -21,7 +21,7 @@
       </q-card-section>
     </q-card>
 
-    <q-card>
+    <q-card class="q-mb-md">
       <q-card-section>
         <div class="text-h6">Docker Concepts (สรุปสั้น ๆ)</div>
         <q-list bordered separator class="q-mt-sm">
@@ -29,6 +29,25 @@
             <q-item-section>
               <q-item-label>{{ item.title }}</q-item-label>
               <q-item-label caption>{{ item.detail }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Docker Quick Reference</div>
+        <q-list bordered separator class="q-mt-sm">
+          <q-item v-for="cmd in dockerCommands" :key="cmd.command">
+            <q-item-section avatar>
+              <q-icon name="terminal" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                <code class="docker-cmd">{{ cmd.command }}</code>
+              </q-item-label>
+              <q-item-label caption>{{ cmd.description }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -79,4 +98,41 @@ const dockerItems = [
     detail: 'ให้บริการใน Docker ติดต่อกันได้ เช่น Nginx ส่งต่อคำขอไปยัง Express',
   },
 ]
+
+const dockerCommands = [
+  {
+    command: 'docker build -t my-quasar-frontend:latest -f frontend/Dockerfile ./frontend',
+    description: 'ใช้เมื่อต้องการสร้าง image ใหม่จาก Dockerfile เช่น หลังแก้ซอร์สโค้ดของ Quasar',
+  },
+  {
+    command: 'docker run -d -p 8080:80 --name my-quasar-frontend-container my-quasar-frontend:latest',
+    description: 'ใช้เมื่อต้องการรัน container จาก image แบบเบื้องหลัง โดยเปิดพอร์ต 8080 บนเครื่องไปยังพอร์ต 80 ใน container',
+  },
+  {
+    command: 'docker ps',
+    description: 'ใช้เมื่อต้องการดูว่ามี container ใดกำลังรันอยู่ พร้อมพอร์ตและสถานะ',
+  },
+  {
+    command: 'docker logs my-quasar-frontend-container',
+    description: 'ใช้เมื่อ container มีปัญหาหรือหยุดทำงาน เพื่อดูข้อความ error ที่โปรแกรมพิมพ์ออกมา',
+  },
+  {
+    command: 'docker compose up -d --build',
+    description: 'ใช้เมื่อต้องการ build และรันทุกบริการใน docker-compose.yml แบบเบื้องหลังด้วยคำสั่งเดียว',
+  },
+  {
+    command: 'docker compose down',
+    description: 'ใช้เมื่อเลิกใช้งาน เพื่อหยุดและลบ container กับ network ที่ Compose สร้างขึ้น',
+  },
+]
 </script>
+
+<style scoped>
+.docker-cmd {
+  font-family: monospace;
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+</style>
